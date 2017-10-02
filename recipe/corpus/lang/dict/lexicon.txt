@@ -1,0 +1,11 @@
+<sil>	SIL
+<UNK>	SIL
+up	ah p
+down	d aw n
+left	l eh f t
+right	r ay t
+zero	z iy r ow
+one	w ah n
+five	f ay v
+eight	ey t
+go	g ow
