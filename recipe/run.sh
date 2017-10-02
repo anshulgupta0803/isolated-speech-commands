@@ -52,7 +52,7 @@ if [ $stage -le 4 ]; then
   steps/align_si.sh --nj $nj --cmd "$train_cmd" \
       data/train data/lang exp/mono exp/mono_ali
   steps/train_deltas.sh --boost-silence 1.25  --cmd "$train_cmd"  \
-      4200 40000 data/train data/lang exp/mono_ali exp/tri1
+      3200 30000 data/train data/lang exp/mono_ali exp/tri1
   echo "Triphone training complete"
 fi
 
