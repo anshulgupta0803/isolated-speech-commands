@@ -10,7 +10,6 @@ nj=4
 cmd=run.pl
 fbank_config=conf/fbank.conf
 compress=true
-write_utt2num_frames=false  # if true writes utt2num_frames
 # End configuration section.
 
 echo "$0 $@"  # Print the command line for logging
@@ -26,7 +25,6 @@ if [ $# -lt 1 ] || [ $# -gt 3 ]; then
    echo "  --fbank-config <config-file>                     # config passed to compute-fbank-feats "
    echo "  --nj <nj>                                        # number of parallel jobs"
    echo "  --cmd (utils/run.pl|utils/queue.pl <queue opts>) # how to run jobs."
-   echo "  --write-utt2num-frames <true|false>     # If true, write utt2num_frames file."
    exit 1;
 fi
 
@@ -85,12 +83,6 @@ for n in $(seq $nj); do
   utils/create_data_link.pl $fbankdir/raw_fbank_$name.$n.ark
 done
 
-if $write_utt2num_frames; then
-  write_num_frames_opt="--write-num-frames=ark,t:$logdir/utt2num_frames.JOB"
-else
-  write_num_frames_opt=
-fi
-
 if [ -f $data/segments ]; then
   echo "$0 [info]: segments file exists: using that."
   split_segments=""
@@ -104,7 +96,7 @@ if [ -f $data/segments ]; then
   $cmd JOB=1:$nj $logdir/make_fbank_${name}.JOB.log \
     extract-segments scp,p:$scp $logdir/segments.JOB ark:- \| \
     compute-fbank-feats $vtln_opts --verbose=2 --config=$fbank_config ark:- ark:- \| \
-    copy-feats --compress=$compress $write_num_frames_opt ark:- \
+    copy-feats --compress=$compress ark:- \
      ark,scp:$fbankdir/raw_fbank_$name.JOB.ark,$fbankdir/raw_fbank_$name.JOB.scp \
      || exit 1;
 
@@ -119,7 +111,7 @@ else
 
   $cmd JOB=1:$nj $logdir/make_fbank_${name}.JOB.log \
     compute-fbank-feats $vtln_opts --verbose=2 --config=$fbank_config scp,p:$logdir/wav.JOB.scp ark:- \| \
-    copy-feats --compress=$compress $write_num_frames_opt ark:- \
+    copy-feats --compress=$compress ark:- \
      ark,scp:$fbankdir/raw_fbank_$name.JOB.ark,$fbankdir/raw_fbank_$name.JOB.scp \
      || exit 1;
 
@@ -136,13 +128,6 @@ fi
 for n in $(seq $nj); do
   cat $fbankdir/raw_fbank_$name.$n.scp || exit 1;
 done > $data/feats.scp
-
-if $write_utt2num_frames; then
-  for n in $(seq $nj); do
-    cat $logdir/utt2num_frames.$n || exit 1;
-  done > $data/utt2num_frames || exit 1
-  rm $logdir/uttnum_frames.*
-fi
 
 rm $logdir/wav.*.scp  $logdir/segments.* 2>/dev/null
 
