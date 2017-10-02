@@ -1,0 +1,11 @@
+<sil>	SIL
+<UNK>	SIL
+up	up
+down	down
+left	left
+right	right
+zero	zero
+one	one
+five	five
+eight	eight
+go	go

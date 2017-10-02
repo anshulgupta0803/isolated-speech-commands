@@ -1,0 +1,9 @@
+down
+eight
+five
+go
+left
+one
+right
+up
+zero
