@@ -8,8 +8,8 @@ stage=-4 #  This allows restarting after partway, when something when wrong.
 config=
 cmd=run.pl
 scale_opts="--transition-scale=1.0 --acoustic-scale=0.1 --self-loop-scale=0.1"
-realign_iters="10 20 30";
-num_iters=25    # Number of iterations of training
+realign_iters="5 10 20 30";
+num_iters=10    # Number of iterations of training
 max_iter_inc=15 # Last iter to increase #Gauss on.
 beam=10
 careful=false
