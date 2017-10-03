@@ -24,7 +24,7 @@ for x in train dev; do
     # the file again from scratch instead of figuring out how to edit it
     for rec in $(awk '{print $1}' $corpus/data/$x/text) ; do
         cmd=${rec%%_*}
-        filename=$corpus/data/audio/$cmd/${rec#*_}.wav
+        filename=audio/$cmd/${rec#*_}.wav
         if [ ! -f "$filename" ] ; then
             echo >&2 "The file $filename could not be found ($rec)"
             exit 1
