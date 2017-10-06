@@ -12,13 +12,16 @@ if [ ! -d "$corpus" ] ; then
 fi
 
 echo "Preparing train and test data"
-mkdir -p data data/local data/train data/dev
+mkdir -p data_words data_words/local data_words/train data_words/dev data_phones data_phones/local data_phones/train data_phones/dev
 
 for x in train dev; do
     echo "Copy spk2utt, utt2spk, wav.scp, text for $x"
-    cp $corpus/data/$x/text     data/$x/text    || exit 1;
-    cp $corpus/data/$x/spk2utt  data/$x/spk2utt || exit 1;
-    cp $corpus/data/$x/utt2spk  data/$x/utt2spk || exit 1;
+    cp $corpus/data/$x/text     data_words/$x/text    || exit 1;
+    cp $corpus/data/$x/spk2utt  data_words/$x/spk2utt || exit 1;
+    cp $corpus/data/$x/utt2spk  data_words/$x/utt2spk || exit 1;
+    cp $corpus/data/$x/text     data_phones/$x/text    || exit 1;
+    cp $corpus/data/$x/spk2utt  data_phones/$x/spk2utt || exit 1;
+    cp $corpus/data/$x/utt2spk  data_phones/$x/utt2spk || exit 1;
 
     # the corpus wav.scp contains physical paths, so we just re-generate
     # the file again from scratch instead of figuring out how to edit it
@@ -32,12 +35,14 @@ for x in train dev; do
         # we might want to store physical paths as a general rule
         #filename=$(readlink -f $filename)
         echo "$rec $filename"
-    done > data/$x/wav.scp
+    done > data_words/$x/wav.scp
+    cp data_words/$x/wav.scp data_phones/$x/wav.scp
 
     # fix_data_dir.sh fixes common mistakes (unsorted entries in wav.scp,
     # duplicate entries and so on). Also, it regenerates the spk2utt from
     # utt2sp
-    utils/fix_data_dir.sh data/$x
+    utils/fix_data_dir.sh data_words/$x
+    utils/fix_data_dir.sh data_phones/$x
 done
 
 echo "Data preparation completed."

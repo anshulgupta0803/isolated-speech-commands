@@ -1,0 +1,5 @@
+data_words/*
+data_phones/*
+mfcc_words/*
+mfcc_phones/*
+exp/*

@@ -10,18 +10,31 @@ if [ ! -d "$corpus" ] ; then
     echo >&2 "The directory $corpus does not exist"
 fi
 
-mkdir -p data/lang data/local/dict
+mkdir -p data_words/lang data_words/local/dict data_phones/lang data_phones/local/dict
 
-cp $corpus/lang/dict/lexicon.txt data/local/dict/lexicon.txt
-cat data/local/dict/lexicon.txt | \
+cp $corpus/lang/dict/lexicon_words.txt data_words/local/dict/lexicon.txt
+cp $corpus/lang/dict/lexicon_phones.txt data_phones/local/dict/lexicon.txt
+
+cat data_words/local/dict/lexicon.txt | \
     perl -ane 'print join("\n", @F[1..$#F]) . "\n"; '  | \
-    sort -u | grep -v 'SIL' > data/local/dict/nonsilence_phones.txt
+    sort -u | grep -v 'SIL' > data_words/local/dict/nonsilence_phones.txt
 
-touch data/local/dict/extra_questions.txt
-touch data/local/dict/optional_silence.txt
+cat data_phones/local/dict/lexicon.txt | \
+    perl -ane 'print join("\n", @F[1..$#F]) . "\n"; '  | \
+    sort -u | grep -v 'SIL' > data_phones/local/dict/nonsilence_phones.txt
 
-echo "SIL"   > data/local/dict/optional_silence.txt
-echo "SIL"   > data/local/dict/silence_phones.txt
-echo "<UNK>" > data/local/dict/oov.txt
+touch data_words/local/dict/extra_questions.txt
+touch data_words/local/dict/optional_silence.txt
+
+touch data_phones/local/dict/extra_questions.txt
+touch data_phones/local/dict/optional_silence.txt
+
+echo "SIL"   > data_words/local/dict/optional_silence.txt
+echo "SIL"   > data_words/local/dict/silence_phones.txt
+echo "<UNK>" > data_words/local/dict/oov.txt
+
+echo "SIL"   > data_phones/local/dict/optional_silence.txt
+echo "SIL"   > data_phones/local/dict/silence_phones.txt
+echo "<UNK>" > data_phones/local/dict/oov.txt
 
 echo "Dictionary preparation succeeded"

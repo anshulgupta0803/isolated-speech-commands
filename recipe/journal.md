@@ -10,6 +10,21 @@ totgauss=15000
 ```
 - Monophone WER = 5.00%
 - Triphone WER = 2.60%
+- Word-based WER = 4.20%
+
+----------
+
+```sh
+num_iters=10
+max_iter_inc=5
+totgauss=1200
+
+num_iters=10
+numleaves=2500
+totgauss=15000
+```
+- Monophone WER = 5.00%
+- Triphone WER = 2.60%
 
 ----------
 ```sh
